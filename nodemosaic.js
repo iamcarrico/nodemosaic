@@ -8,14 +8,15 @@ jQuery(document).ready(function($) {
 		range_col: [1, 1000],
 		range_row: [1, 1000],
 		
-		oncreate: function($element, col, row) {
-			jQuery.getJSON(
+		oncreate: function(tile, col, row) {
+			$.getJSON(
 				('/nodemosaic/tile/' + col + '/' + row),
 				function(data){
-					jQuery($element).append(data);
-				});
+					$(tile).append(data);
+				}
+			);
 		}
 	};
 	
-	jQuery.infinitedrag("#nodemosaic-wall", {}, tile_options);
+	$.infinitedrag("#nodemosaic-wall", {}, tile_options);
 });
