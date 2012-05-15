@@ -36,9 +36,13 @@ function nodemosaic_block_view($delta = '') {
 		case 'nodemosaic_block':
 			$block['subject'] = t('Mosaic Display');
 			if(user_access('access content')){
-				$block['content'] = "Test Content";
+				$block['content'] = '<div id="nodemosaic-viewport"><div id="nodemosaic-wall"></div></div>';
 			}
 			break;
 	}
 	return $block;
+}
+
+function nodemosaic_init() {
+  drupal_add_library('system', 'ui.draggable');
 }
