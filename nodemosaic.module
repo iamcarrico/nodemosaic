@@ -1,9 +1,44 @@
 <?php
-
+/**
+ * Implements hook_help.
+ *
+ * Displays help and module information.
+ *
+ * @param path 
+ *   Which path of the site we're using to display help
+ * @param arg 
+ *   Array that holds the current path as returned from arg() function
+ */
 function nodemosaic_help($path, $arg) {
 	switch ($path) {
 		case "admin/help#nodemosiac":
 			return '<p>'.  t("Displays node tiles in a grid, handles certain field rules") .'</p>';
 			break;
 	}
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function nodemosaic_block_info() {
+  $blocks['nodemosaic_block'] = array(
+    'info' => t('Mosaic Display'), //The name that will appear in the block list.
+    'cache' => DRUPAL_CACHE_PER_ROLE, //Default
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function nodemosaic_block_view($delta = '') {
+	switch($delta){
+		case 'nodemosaic_block':
+			$block['subject'] = t('Mosaic Display');
+			if(user_access('access content')){
+				$block['content'] = "Test Content";
+			}
+			break;
+	}
+	return $block;
 }
