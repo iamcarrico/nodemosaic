@@ -67,8 +67,11 @@ function nodemosaic_tile_view($row = false, $col = false) {
 		  ->fieldCondition('field_tilerow', 'value', $row, '=')
 		  ->fieldCondition('field_tilecol', 'value', $col, '=');
 
-		$result = $query->execute(); 
-		drupal_json_output($result);
+		$result = $query->execute();
+		if ($result) { drupal_json_output($result); }
+		else { drupal_json_output('no_result'); }
+	} else {
+		drupal_json_output('range_error');
 	}
 	exit;
 }
