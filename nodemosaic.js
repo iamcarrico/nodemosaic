@@ -9,12 +9,11 @@ jQuery(document).ready(function($) {
 		range_row: [1, 1000],
 		
 		oncreate: function($element, col, row) {
-			$('<div class="_content"></div>').
-				html('<span>' + col + 'x' + row + '</span><a href="#' + col + 'x' + row + '">&rarr;</a>').
-				appendTo($element)/*.
-				click(function(e) {
-					alert(col + 'x' + row);
-				})*/;
+			jQuery.getJSON(
+				('/nodemosaic/tile/' + col + '/' + row),
+				function(data){
+					jQuery($element).append(data);
+				});
 		}
 	};
 	
