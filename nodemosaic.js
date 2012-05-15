@@ -16,7 +16,7 @@ function buildTile (data, tile, col, row) {
 					.append(
 						contentOpen +
 						linkOpen +
-						'&bull;' +
+						'?' +
 						linkClose + 
 						contentClose
 					);
