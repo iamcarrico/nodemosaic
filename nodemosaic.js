@@ -19,32 +19,34 @@ function buildTile (data, tile, col, row) {
 						'?' +
 						linkClose + 
 						contentClose
-					);
+					)
+					.fadeIn();
 				break;
 				
 			case "range_error":
-				$(tile).addClass('tile-range');
+				$(tile).addClass('tile-range').fadeIn();
 				break;
 		}
 			
 	} else if ( typeof(data) == "object" ) {
-		tileImage = (
+		$(tile)
+			.append(
+				contentOpen +
+				linkOpen +
+				linkClose + 
+				contentClose
+			)
+		tileImage =
+			$('<img />', {src: data['image'],alt: data['title']})
+			.one('load', function () { $(this).closest('._tile').fadeIn(); })
+			.appendTo( $(tile).children('div').children('a') );
+		/*tileImage = (
 			'<img src="' +
 			data['image'] +
 			'" alt="' +
 			data['title'] + 
 			'" />'
-		);
-		$(tile)
-			.append(
-				contentOpen +
-				linkOpen +
-				tileImage +
-				linkClose + 
-				contentClose
-			)
-			.children('img')
-			.fadeIn();
+		);*/
 	}
 }
 
