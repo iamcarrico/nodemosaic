@@ -1,0 +1,9 @@
+<?php
+
+function nodemosaic_help($path, $arg) {
+	switch ($path) {
+		case "admin/help#nodemosiac":
+			return '<p>'.  t("Displays node tiles in a grid, handles certain field rules") .'</p>';
+			break;
+	}
+}
