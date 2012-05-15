@@ -71,14 +71,13 @@ function nodemosaic_tile_view($row = false, $col = false) {
 		
 		/* TODO: There HAS to be a more efficient way to do this... :( */
 		if (isset($result['node'])) {
-			$node = array_values(entity_load('node', array_keys($result['node'])));
-			$node = (array) $node[0];
+			$node = array_shift(entity_load('node', array_keys($result['node'])));
 			$output = array(
-				'nid' => $node['nid'],
-				'title' => $node['title'],
-				'image' => image_style_url('medium', $node['field_tileimage']['und'][0]['uri']),
-				'row' => $node['field_tilerow']['und'][0]['value'],
-				'col' => $node['field_tilecol']['und'][0]['value'],
+				'nid' => $node->nid,
+				'title' => $node->title,
+				'image' => image_style_url('medium', $node->field_tileimage['und'][0]['uri']),
+				'row' => $node->field_tilerow['und'][0]['value'],
+				'col' => $node->field_tilecol['und'][0]['value'],
 			);
 			drupal_json_output($output);
 		}
