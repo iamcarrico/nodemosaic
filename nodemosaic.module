@@ -48,6 +48,31 @@ function nodemosaic_init() {
 	drupal_add_library('system', 'ui.draggable');
 }
 
+function nodemosaic_menu() {
+	$items['nodemosaic/tile'] = array(
+		'title' => 'Node Mosaic Tile by JSON',
+		'page callback' => 'nodemosaic_tile_view',
+		'access callback' => true, /* All visitors have access */ 
+		'type' => MENU_CALLBACK,
+	);
+	return $items;
+}
+
+function nodemosaic_tile_view($row = false, $col = false) {
+	if ($row > 0 && $col > 0 ) {
+		$query = new EntityFieldQuery();
+		$query
+		  ->entityCondition('entity_type', 'node', '=')
+		  ->propertyCondition('status', 1, '=')
+		  ->fieldCondition('field_tilerow', 'value', $row, '=')
+		  ->fieldCondition('field_tilecol', 'value', $col, '=');
+
+		$result = $query->execute(); 
+		drupal_json_output($result);
+	}
+	exit;
+}
+
 function nodemosaic_field_access($op, $field, $entity_type, $entity, $account) {
 	/* When a tile is created, the row and column should be editable; once the
 	tile has been created, they should not change. Here, we identify those fields
