@@ -44,5 +44,17 @@ function nodemosaic_block_view($delta = '') {
 }
 
 function nodemosaic_init() {
-  drupal_add_library('system', 'ui.draggable');
+	/* We need jQuery.ui Draggable for the mosaic tile. */
+	drupal_add_library('system', 'ui.draggable');
+}
+
+function nodemosaic_field_access($op, $field, $entity_type, $entity, $account) {
+	/* When a tile is created, the row and column should be editable; once the
+	tile has been created, they should not change. Here, we identify those fields
+	and return empty($entity->nid) for access to those fields. That function would
+	return true for a new node (the node doesn't exist so NID would be empty) and
+	returns false for an existing node (when these values should not be allowed
+	to change). */
+	if ($op == 'edit' && $field['field_name'] == 'field_tilerow') { return empty($entity->nid); }
+	if ($op == 'edit' && $field['field_name'] == 'field_tilecol') { return empty($entity->nid); }
 }
