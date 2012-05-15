@@ -75,7 +75,7 @@ function nodemosaic_tile_view($row = false, $col = false) {
 			$output = array(
 				'nid' => $node->nid,
 				'title' => $node->title,
-				'image' => image_style_url('medium', $node->field_tileimage['und'][0]['uri']),
+				'image' => image_style_url('nodemosaic_tile', $node->field_tileimage['und'][0]['uri']),
 				'row' => $node->field_tilerow['und'][0]['value'],
 				'col' => $node->field_tilecol['und'][0]['value'],
 			);
