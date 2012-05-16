@@ -49,6 +49,8 @@ function buildTile (data, tile, col, row) {
 	}
 }
 
+nodeMosaic = false; /* Delare in global scope for testing */
+
 jQuery(document).ready(function() {
 	
 	var tile_options = {
@@ -69,7 +71,7 @@ jQuery(document).ready(function() {
 		}
 	};
 	
-	$.infinitedrag("#nodemosaic-wall", {}, tile_options);
+	nodeMosaic = $.infinitedrag("#nodemosaic-wall", {}, tile_options);
 });
 
 })(jQuery);
