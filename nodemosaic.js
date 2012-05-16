@@ -5,8 +5,6 @@ function buildTile (data, tile, col, row) {
 	// Some messy variables we'll use later:
 	contentOpen = '<div class="_content">';
 	contentClose = '</div>';
-	linkOpen = ('<a href="#' + col + '/' + row +'">');
-	linkClose = '</a>';
 	
 	if ( typeof(data) == "string") {
 		switch (data) {
@@ -15,9 +13,9 @@ function buildTile (data, tile, col, row) {
 					.addClass('tile-empty')
 					.append(
 						contentOpen +
-						linkOpen +
+						'<a href="#' + col + '/' + row +'">' +
 						'?' +
-						linkClose + 
+						'</a>' + 
 						contentClose
 					)
 					.fadeIn();
@@ -32,8 +30,8 @@ function buildTile (data, tile, col, row) {
 		$(tile)
 			.append(
 				contentOpen +
-				linkOpen +
-				linkClose + 
+				'<a href="' + data['path'] + '">' +
+				'</a>' + 
 				contentClose
 			)
 		tileImage =
