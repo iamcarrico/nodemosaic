@@ -13,8 +13,8 @@ function buildTile (data, tile, col, row) {
 					.addClass('tile-empty')
 					.append(
 						contentOpen +
-						'<a href="/node/add/mosaic-tile?edit[field_tilerow][und][0][value]=' + row +
-						'&edit[field_tilecol][und][0][value]=' + col + '">' +
+						'<a href="/node/add/mosaic-tile?edit[field_tilecol][und][0][value]=' + col +
+						'&edit[field_tilerow][und][0][value]=' + row + '">' +
 						'ADD' +
 						'</a>' + 
 						contentClose
@@ -61,7 +61,7 @@ jQuery(document).ready(function() {
 		
 		oncreate: function(tile, col, row) {
 			$.getJSON(
-				('/nodemosaic/tile/' + row + '/' + col),
+				('/nodemosaic/tile/' + col + '/' + row),
 				function(data){
 					buildTile(data, tile, col, row);
 				}

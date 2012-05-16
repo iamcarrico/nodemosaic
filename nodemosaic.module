@@ -58,14 +58,14 @@ function nodemosaic_menu() {
 	return $items;
 }
 
-function nodemosaic_tile_view($row = false, $col = false) {
-	if ($row > 0 && $col > 0 ) {
+function nodemosaic_tile_view($col = false, $row = false) {
+	if ( $col > 0 && $row > 0 ) {
 		$query = new EntityFieldQuery();
 		$query
 		  ->entityCondition('entity_type', 'node', '=')
 		  ->propertyCondition('status', 1, '=')
-		  ->fieldCondition('field_tilerow', 'value', $row, '=')
-		  ->fieldCondition('field_tilecol', 'value', $col, '=');
+		  ->fieldCondition('field_tilecol', 'value', $col, '=')
+		  ->fieldCondition('field_tilerow', 'value', $row, '=');
 
 		$result = $query->execute();
 		
@@ -94,7 +94,7 @@ function nodemosaic_field_access($op, $field, $entity_type, $entity, $account) {
 	return true for a new node (the node doesn't exist so NID would be empty) and
 	returns false for an existing node (when these values should not be allowed
 	to change). */
-	if ($op == 'edit' && $field['field_name'] == 'field_tilerow') { return empty($entity->nid); }
 	if ($op == 'edit' && $field['field_name'] == 'field_tilecol') { return empty($entity->nid); }
+	if ($op == 'edit' && $field['field_name'] == 'field_tilerow') { return empty($entity->nid); }
 }
 
