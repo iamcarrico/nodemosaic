@@ -9,7 +9,7 @@ user submitted "mosaic" of story tiles. Each tile:
 * has a title.
 * has a tile image.
 * has "coordinates": an intiger each for row and column between 1 and 1000.
-* most should be of the "story_tile" content type, although "pages" should have
+* most should be of the "mosaic-tile" content type, although "pages" should have
   these fields to allow actual site pages to show up in the mosaic.
 * is viewable as part of the jQuery Infinite Scroll plugin's generated mosaic
 * is viewable as an actual node showing the full text of the story
@@ -22,16 +22,19 @@ Presently, this module:
 
 * Provides a block to hold the mosaic view
 * Provides a menu callback function to get node information via JSON
-
+* Populates tiles with the provided JSON information
+* Populate nonexistant tiles with links to node/mosaic-tile/add and prepopulate
+  the column and row fields from the tile clicked on. (These values cannot be
+  changed later on node edit so that the tile is permanently in place.)
 
 ### Roadmap:
 
 Going forward, this module should also:
 
-* Populate tiles with the provided JSON information
-* Populate nonexistant tiles with links to node/story_tile/add
 * Include a Features install script that will generate the content type when moved
   into production.
-
+* Be workflow state aware
+* Cache the JSON if nothing else. That's a pretty heavy load at the moment.
+  
 Needless to say, it's a unique set of functions for a particular installation.
 It's also my first stab at writing a Drupal module, so be warned.
