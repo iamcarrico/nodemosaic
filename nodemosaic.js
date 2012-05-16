@@ -71,6 +71,10 @@ jQuery(document).ready(function() {
 		}
 	};
 	
+	if ( $('body').hasClass('node-type-mosaic-tile') ) {
+		tile_options['start_col'] = parseInt($('#field_tilecol').text());
+		tile_options['start_row'] = parseInt($('#field_tilerow').text());
+	}
 	nodeMosaic = $.infinitedrag("#nodemosaic-wall", {}, tile_options);
 });
 
