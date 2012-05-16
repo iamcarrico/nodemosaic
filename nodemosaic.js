@@ -13,8 +13,9 @@ function buildTile (data, tile, col, row) {
 					.addClass('tile-empty')
 					.append(
 						contentOpen +
-						'<a href="#' + col + '/' + row +'">' +
-						'?' +
+						'<a href="/node/add/mosaic-tile?edit[field_tilerow][und][0][value]=' + row +
+						'&edit[field_tilecol][und][0][value]=' + col + '">' +
+						'ADD' +
 						'</a>' + 
 						contentClose
 					)
