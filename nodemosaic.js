@@ -61,7 +61,7 @@ jQuery(document).ready(function() {
 		
 		oncreate: function(tile, col, row) {
 			$.getJSON(
-				('/nodemosaic/tile/' + col + '/' + row),
+				('/nodemosaic/tile/' + row + '/' + col),
 				function(data){
 					buildTile(data, tile, col, row);
 				}
