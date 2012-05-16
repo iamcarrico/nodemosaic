@@ -170,33 +170,6 @@
 		};
 		
 		self.center = function(col, row) {
-			/* This original centering function doesn't work right, but it is
-			   more simply rebuilt using the code originally used to center the
-			   start tile on initial grid setup. So let's just do it that way
-			   and skip this block. */
-			   
-			/* var x = _to.width * col, // The right of the req'd tile
-				y = _to.height * row, // The bottom of the req'd tile
-				half_width = _to.width / 2, // Half the width of the tile
-				half_height = _to.height / 2, // Half the height of the tile
-				half_vw_width = $viewport.width() / 2, 
-				half_vw_height = $viewport.height() / 2,
-				offset = $draggable.offset();
-					// Current left and top of the wall RELATIVE to viewport
-				
-			var new_offset = { 
-				left: -x - (half_width - half_vw_width), 
-				top: -y - (half_height - half_vw_height)
-			};
-			
-			// This restricts dragging to one axis, I haven't defined it.
-			if (_do.axis == "x") {
-				new_offset.top = offset.top;
-			} else if (_do.axis == "y") {
-				new_offset.left = offset.left;
-			}
-			
-			$draggable.offset(new_offset);*/
 			
 			$draggable.offset({
 				left:
@@ -223,37 +196,9 @@
 			viewport_cols = Math.ceil(viewport_width / _to.width),
 			viewport_rows = Math.ceil(viewport_height / _to.height);
 
-		/* To start fixing my centering problem, let's start over and
-		   try to have the "starting" tile centered when this all loads.
-		   That would be preferable anyway, and will give me a blueprint
-		   on how to fix the self.center() method. */
-		$draggable.offset({
-			left:
-				$viewport.offset().left
-				- (_to.start_col * _to.width)
-				+ ($viewport.width() / 2)
-				- (_to.width / 2),
-			top:
-				$viewport.offset().top
-				- (_to.start_row * _to.height)
-				+ ($viewport.height() / 2)
-				- (_to.height / 2),
-		});
-
 		var grid = {};
-		/* With the changes above to centering the "start tile", these lines
-		   started to load the incorrect tiles. It would load the "start tile"
-		   and then all the tiles to the right and below the starting tile as it
-		   did before, and wouldn't load tiles that come "before" the start tile
-		   in either direction. But the update_tiles() function already handles
-		   that correctly, so let's set up the grid array and fire that function. */
-		   
-		/*for (var i = _to.start_col, m = _to.start_col + viewport_cols; i < m && (_to.range_col[0] <= i && i <= _to.range_col[1]); i++) {
-			grid[i] = {}
-			for (var j = _to.start_row, n = _to.start_row + viewport_rows; j < n && (_to.range_row[0] <= j && j <= _to.range_row[1]); j++) {
-				create_tile(i, j);
-			}
-		}*/
+		
+		this.center(_to.start_col, _to.start_row);
 		update_tiles();
 		
 		// Handle resize of window.
