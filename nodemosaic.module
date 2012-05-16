@@ -69,7 +69,6 @@ function nodemosaic_tile_view($col = false, $row = false) {
 
 		$result = $query->execute();
 		
-		/* TODO: There HAS to be a more efficient way to do this... :( */
 		if (isset($result['node'])) {
 			$node = array_shift(entity_load('node', array_keys($result['node'])));
 			$output = array(
