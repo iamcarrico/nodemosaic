@@ -87,7 +87,12 @@ function nodemosaic_tile_view($col = false, $row = false) {
 				'workflow' => $node->workflow,
 					/* Tentatively 1=Creation, 2=Awaiting Moderation, 3=Approved */
 			);
-			drupal_json_output($output);
+			if ($output['workflow'] === "3") {
+				// It's the third workflow state, "approved." Send it.
+				drupal_json_output($output);
+			} else {
+				drupal_json_output('pending');
+			}
 		}
 		else { drupal_json_output('no_result'); }
 	} else {

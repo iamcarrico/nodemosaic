@@ -25,6 +25,13 @@ function buildTile (data, tile, col, row) {
 			case "range_error":
 				$(tile).addClass('tile-range').fadeIn();
 				break;
+			
+			case "pending":
+				$(tile)
+					.addClass('tile-pending')
+					.append(contentOpen + '&nbsp;' + contentClose)
+					.fadeIn();
+				break;
 		}
 			
 	} else if ( typeof(data) == "object" ) {
