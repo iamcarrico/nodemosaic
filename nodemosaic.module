@@ -65,7 +65,15 @@ function nodemosaic_tile_view($col = false, $row = false) {
 		  ->entityCondition('entity_type', 'node', '=')
 		  ->propertyCondition('status', 1, '=')
 		  ->fieldCondition('field_tilecol', 'value', $col, '=')
-		  ->fieldCondition('field_tilerow', 'value', $row, '=');
+		  ->fieldCondition('field_tilerow', 'value', $row, '=')
+		  ->addMetaData('account', user_load(1));
+			/* DANGER, WILL ROBINSON: This allows the lookup query to run as if
+			   user #1 was running it, bypassing any node_access rules (like those
+			   set up by Workflow Access). Without this, the query results are
+			   empty for tiles awaiting moderation, which triggers the javascript
+			   front-end to put an "Add" link there. We'll make sure, when the
+			   JSON is dispatched, to return a string error code instead of the
+			   node object to maintain the need for moderation. */
 
 		$result = $query->execute();
 		
@@ -76,6 +84,8 @@ function nodemosaic_tile_view($col = false, $row = false) {
 				'title' => $node->title,
 				'path' => '/' . drupal_lookup_path('alias',"node/".$node->nid),
 				'image' => image_style_url('nodemosaic_tile', $node->field_tileimage['und'][0]['uri']),
+				'workflow' => $node->workflow,
+					/* Tentatively 1=Creation, 2=Awaiting Moderation, 3=Approved */
 			);
 			drupal_json_output($output);
 		}
