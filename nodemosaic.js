@@ -13,9 +13,9 @@ function buildTile (data, tile, col, row) {
 					.addClass('tile-empty')
 					.append(
 						contentOpen +
-						'<a href="/node/add/mosaic-tile?edit[field_tilecol][und][0][value]=' + col +
+						'<a class="message" href="/node/add/mosaic-tile?edit[field_tilecol][und][0][value]=' + col +
 						'&edit[field_tilerow][und][0][value]=' + row + '">' +
-						'ADD' +
+						'Add' +
 						'</a>' + 
 						contentClose
 					)
@@ -24,6 +24,13 @@ function buildTile (data, tile, col, row) {
 				
 			case "range_error":
 				$(tile).addClass('tile-range').fadeIn();
+				break;
+			
+			case "pending":
+				$(tile)
+					.addClass('tile-pending')
+					.append(contentOpen + '<span class="message">Claimed</span>' + contentClose)
+					.fadeIn();
 				break;
 		}
 			
