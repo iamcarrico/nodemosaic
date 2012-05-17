@@ -72,8 +72,12 @@ jQuery(document).ready(function() {
 	};
 	
 	if ( $('body').hasClass('node-type-mosaic-tile') ) {
-		tile_options['start_col'] = parseInt($('#field_tilecol').text());
-		tile_options['start_row'] = parseInt($('#field_tilerow').text());
+		override_start_col = parseInt($('#field_tilecol').text());
+		override_start_row = parseInt($('#field_tilerow').text());
+		if ( override_start_col > 0 && override_start_row > 0 ) {
+			tile_options['start_col'] = override_start_col;
+			tile_options['start_row'] = override_start_row;
+		}                            
 	}
 	nodeMosaic = $.infinitedrag("#nodemosaic-wall", {}, tile_options);
 });
