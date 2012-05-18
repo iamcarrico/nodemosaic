@@ -3,10 +3,9 @@ description = AAF Tulsa Node Mosaic Module
 core = 7.x
 
 dependencies[] = features
-dependencies[] = less
 dependencies[] = prepopulate
 
-stylesheets[all][] = nodemosaic.less
+stylesheets[all][] = nodemosaic.css
 
 scripts[] = jquery.infinitedrag.js
 scripts[] = nodemosaic.js
