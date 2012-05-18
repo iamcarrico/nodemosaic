@@ -65,7 +65,7 @@ function nodemosaic_tile_view($col = false, $row = false) {
 			// We got a cached object\
 			if ($cache->expire > REQUEST_TIME || $cache->expire == 0) {
 				// It's either current or permanent; use it.
-				var_dump($cache->data);
+				drupal_json_output($cache->data);
 				exit;
 			} else {
 				// Past expiration; moving on.
@@ -121,12 +121,12 @@ function nodemosaic_tile_view($col = false, $row = false) {
 				   know how to fix. Don't keep this too long. Set for 5 minutes. */
 		}
 		
+		drupal_json_output($data);
 		cache_set(('tile_' . $col . 'x' . $row), $data, "cache_nodemosaic", $expiration);
-		var_dump($data);
-		
 	} else {
-		var_dump('range_error');
+		drupal_json_output('range_error');
 	}
+	exit;
 }
 
 function nodemosaic_field_access($op, $field, $entity_type, $entity, $account) {
