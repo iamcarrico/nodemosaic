@@ -60,55 +60,73 @@ function nodemosaic_menu() {
 
 function nodemosaic_tile_view($col = false, $row = false) {
 	if ( $col > 0 && $row > 0 ) {
-		if ($cache = cache_get(('tile_' . $col . 'x' . $row), "cache_nodemosaic") ) {
-			echo "we got a cached object\n";
-			var_dump($cache);
-			exit;
-		} else {
-			$query = new EntityFieldQuery();
-			$query
-			  ->entityCondition('entity_type', 'node', '=')
-			  ->propertyCondition('status', 1, '=')
-			  ->fieldCondition('field_tilecol', 'value', $col, '=')
-			  ->fieldCondition('field_tilerow', 'value', $row, '=')
-			  ->addMetaData('account', user_load(1));
-				/* DANGER, WILL ROBINSON: This allows the lookup query to run as if
-				   user #1 was running it, bypassing any node_access rules (like those
-				   set up by Workflow Access). Without this, the query results are
-				   empty for tiles awaiting moderation, which triggers the javascript
-				   front-end to put an "Add" link there. We'll make sure, when the
-				   JSON is dispatched, to return a string error code instead of the
-				   node object to maintain the need for moderation. */
-
-			$result = $query->execute();
-			$data = false; /* We'll store the output here */
-			
-			if (isset($result['node'])) {
-				$node = array_shift(entity_load('node', array_keys($result['node'])));
-				$output = array(
-					'nid' => $node->nid,
-					'title' => $node->title,
-					'path' => '/' . drupal_lookup_path('alias',"node/".$node->nid),
-					'image' => image_style_url('nodemosaic_tile', $node->field_tileimage['und'][0]['uri']),
-					'workflow' => $node->workflow,
-						/* Tentatively 1=Creation, 2=Awaiting Moderation, 3=Approved */
-				);
-				if ($output['workflow'] === "3") {
-					// It's the third workflow state, "approved." Send it.
-					$data = $output;
-				} else {
-					$data = 'pending';
-				}
+		$cache = cache_get(('tile_' . $col . 'x' . $row), "cache_nodemosaic");
+		if ( $cache ) {
+			// We got a cached object\
+			if ($cache->expire > REQUEST_TIME || $cache->expire == 0) {
+				// It's either current or permanent; use it.
+				var_dump($cache->data);
+				exit;
+			} else {
+				// Past expiration; moving on.
 			}
-			else { $data = 'no_result'; }
-			
-			cache_set(('tile_' . $col . 'x' . $row), $data, "cache_nodemosaic", time() + 300);
-			var_dump($data);
-		} /* END: get_cache was false */
+		}
+		
+		$query = new EntityFieldQuery();
+		$query
+		  ->entityCondition('entity_type', 'node', '=')
+		  ->propertyCondition('status', 1, '=')
+		  ->fieldCondition('field_tilecol', 'value', $col, '=')
+		  ->fieldCondition('field_tilerow', 'value', $row, '=')
+		  ->addMetaData('account', user_load(1));
+			/* DANGER, WILL ROBINSON: This allows the lookup query to run as if
+			   user #1 was running it, bypassing any node_access rules (like those
+			   set up by Workflow Access). Without this, the query results are
+			   empty for tiles awaiting moderation, which triggers the javascript
+			   front-end to put an "Add" link there. We'll make sure, when the
+			   JSON is dispatched, to return a string error code instead of the
+			   node object to maintain the need for moderation. */
+
+		$result = $query->execute();
+		$data = false; /* To store output. */
+		$expiration = time() + (60 * 5); /* Expiration time. 5 min default. */
+		
+		if (isset($result['node'])) {
+			$node = array_shift(entity_load('node', array_keys($result['node'])));
+			$output = array(
+				'nid' => $node->nid,
+				'title' => $node->title,
+				'path' => '/' . drupal_lookup_path('alias',"node/".$node->nid),
+				'image' => image_style_url('nodemosaic_tile', $node->field_tileimage['und'][0]['uri']),
+				'workflow' => $node->workflow,
+					/* Tentatively 1=Creation, 2=Awaiting Moderation, 3=Approved */
+			);
+			if ($output['workflow'] === "3") {
+				// It's the third workflow state, "approved." Send it.
+				$data = $output;
+				// Also, it ain't likely to change. Let's keep it "forever"
+				$expiration = CACHE_PERMANENT;
+			} else {
+				$data = 'pending';
+				$expiration = time() + (60 * 60);
+					/* It's gonna be moderated soon but it doesn't *have* to
+					   show up immediately. Set for 1 hour. */
+			}
+		}
+		else {
+			$data = 'no_result';
+			$expiration = time() + (60 * 5);
+				/* It hasn't been claimed yet, but if it gets claimed before this
+				   has expired, someone's gonna get a bizarre error they may not
+				   know how to fix. Don't keep this too long. Set for 5 minutes. */
+		}
+		
+		cache_set(('tile_' . $col . 'x' . $row), $data, "cache_nodemosaic", $expiration);
+		var_dump($data);
+		
 	} else {
 		var_dump('range_error');
 	}
-	echo "test";
 }
 
 function nodemosaic_field_access($op, $field, $entity_type, $entity, $account) {
