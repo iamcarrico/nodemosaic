@@ -60,6 +60,18 @@ function nodemosaic_menu() {
 
 function nodemosaic_tile_view($col = false, $row = false) {
 	if ( $col > 0 && $row > 0 ) {
+		$cache = cache_get(('tile_' . $col . 'x' . $row), "cache_nodemosaic");
+		if ( $cache ) {
+			// We got a cached object\
+			if ($cache->expire > REQUEST_TIME || $cache->expire == 0) {
+				// It's either current or permanent; use it.
+				drupal_json_output($cache->data);
+				exit;
+			} else {
+				// Past expiration; moving on.
+			}
+		}
+		
 		$query = new EntityFieldQuery();
 		$query
 		  ->entityCondition('entity_type', 'node', '=')
@@ -76,6 +88,8 @@ function nodemosaic_tile_view($col = false, $row = false) {
 			   node object to maintain the need for moderation. */
 
 		$result = $query->execute();
+		$data = false; /* To store output. */
+		$expiration = time() + (60 * 5); /* Expiration time. 5 min default. */
 		
 		if (isset($result['node'])) {
 			$node = array_shift(entity_load('node', array_keys($result['node'])));
@@ -89,12 +103,26 @@ function nodemosaic_tile_view($col = false, $row = false) {
 			);
 			if ($output['workflow'] === "3") {
 				// It's the third workflow state, "approved." Send it.
-				drupal_json_output($output);
+				$data = $output;
+				// Also, it ain't likely to change. Let's keep it "forever"
+				$expiration = CACHE_PERMANENT;
 			} else {
-				drupal_json_output('pending');
+				$data = 'pending';
+				$expiration = time() + (60 * 60);
+					/* It's gonna be moderated soon but it doesn't *have* to
+					   show up immediately. Set for 1 hour. */
 			}
 		}
-		else { drupal_json_output('no_result'); }
+		else {
+			$data = 'no_result';
+			$expiration = time() + (60 * 5);
+				/* It hasn't been claimed yet, but if it gets claimed before this
+				   has expired, someone's gonna get a bizarre error they may not
+				   know how to fix. Don't keep this too long. Set for 5 minutes. */
+		}
+		
+		drupal_json_output($data);
+		cache_set(('tile_' . $col . 'x' . $row), $data, "cache_nodemosaic", $expiration);
 	} else {
 		drupal_json_output('range_error');
 	}

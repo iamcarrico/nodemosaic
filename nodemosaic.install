@@ -1,0 +1,9 @@
+<?php
+function nodemosaic_schema() {
+	/* We're going to cache the tiles so the JSON can be generated faster. There
+	   is potential for that to be a TON of data, so let's give it its own table
+	   why don't we? --- This function builds a new table using the exact same
+	   structure as the primary cache table, called cache_nodemosaic. */
+	$schema['cache_nodemosaic'] = drupal_get_schema_unprocessed('system', 'cache');
+	return $schema;
+}
