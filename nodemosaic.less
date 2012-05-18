@@ -6,59 +6,49 @@
 	color:#000;
 	border:1px solid #BBB;
 	background-color:#000;
-
-	._tile {
-		display: none;
-	}
-	
-	._tile ._content {
-		margin:5px;
-		width:90px;
-		height:90px;
-		-webkit-border-radius: 2px;
-		border-radius: 2px;
-		overflow: hidden;
-		opacity: 0.75;
-
-		&:hover {
-			opacity: 1;
-		}
-		
-		.message {
-			display: block;
-			position: absolute;
-			top: 50%;
-			width: 90px;
-			font: 10px/15px arial, sans-serif;
-			text-transform: uppercase;
-			text-decoration: none;
-			text-align: center;		
-		}
-	}
-
-	.tile-empty ._content {
-		border: 1px solid #383838;
-		background: #333;
-
-		a {
-			color: #CCC;
-			
-			&:hover {
-				color: white;
-			}
-				
-		}
-	}
-	
-	.tile-pending ._content {
-		border: 1px solid #282828;
-		background: #222;	
-		
-		span {
-			color: #666;		
-		}
-	}
 }
+
+#nodemosaic-viewport ._tile {
+	display: none;
+}
+	
+#nodemosaic-viewport ._content {
+	margin:5px;
+	width:90px;
+	height:90px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	overflow: hidden;
+	opacity: 0.75;
+}
+
+#nodemosaic-viewport ._content:hover { opacity: 1; }
+		
+#nodemosaic-viewport .message {
+	display: block;
+	position: absolute;
+	top: 50%;
+	width: 90px;
+	font: 10px/15px arial, sans-serif;
+	text-transform: uppercase;
+	text-decoration: none;
+	text-align: center;		
+}
+
+#nodemosaic-viewport .tile-empty ._content {
+	border: 1px solid #383838;
+	background: #333;
+}
+
+#nodemosaic-viewport .tile-empty a { color: #CCC; }
+#nodemosaic-viewport .tile-empty a:hover { color: white; }
+	
+#nodemosaic-viewport .tile-pending ._content {
+	border: 1px solid #282828;
+	background: #222;	
+}
+		
+#nodemosaic-viewport .tile-pending span { color: #666; }
 
 .nodemosaic_coords {
 	display: none;
